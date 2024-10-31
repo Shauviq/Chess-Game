@@ -1,7 +1,5 @@
-import { blackpawn } from "../Data/pieces.js";
-import { whitepawn } from "../Data/pieces.js";
-
-const root_div = document.getElementById("root");
+import * as piece from "../Data/pieces.js";
+import { root_div } from "../Helper/constants.js";
 
 
 //use when you want to render pieces on the board
@@ -36,13 +34,64 @@ function initgamerender(data){
 
             //render blackpawn
             if(square.id[1]==7){
-                square.piece = blackpawn(square.id);
+                square.piece = piece.blackpawn(square.id);
+            }
+
+            //render blackrook
+            if(square.id == "h8" || square.id == "a8"){
+                square.piece = piece.blackrook(square.id);
+            }
+
+            //render blackbishop
+            if(square.id == "c8" || square.id == "f8"){
+                square.piece = piece.blackbishop(square.id);
+            }
+
+            //render blackqueen
+            if(square.id == "d8"){
+                square.piece = piece.blackqueen(square.id);
+            }
+
+            //render blackking
+            if(square.id == "e8"){
+                square.piece = piece.blackking(square.id);
+            }
+
+            //render blackknight
+            if(square.id == "b8" || square.id == "g8"){
+                square.piece = piece.blackknight(square.id);
             }
 
             //render whitepawn
             if(square.id[1]==2){
-                square.piece = whitepawn(square.id);
+                square.piece = piece.whitepawn(square.id);
             }
+
+            //render whiterook
+            if(square.id == "a1" || square.id == "h1"){
+                square.piece = piece.whiterook(square.id);
+            }
+
+            //render whiteknight
+            if(square.id == "b1" || square.id == "g1"){
+                square.piece = piece.whiteknight(square.id);
+            }
+
+            //render whitebishop
+            if(square.id == "c1" || square.id == "f1"){
+                square.piece = piece.whitebishop(square.id);
+            }
+
+            //render whiteking
+            if(square.id == "e1"){
+                square.piece = piece.whiteking(square.id);
+            }
+
+            //render whitequeen
+            if(square.id == "d1"){
+                square.piece = piece.whitequeen(square.id);
+            }
+
             rowel.appendChild(squarediv);
         });
         rowel.classList.add("squarerow");
