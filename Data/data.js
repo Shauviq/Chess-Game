@@ -8,7 +8,7 @@ function Square(color, id, piece) {
   return { color, id, piece };
 }
 
-function dosquarerow(rowid){
+function squarerow(rowid){
   const squarerow = [];
   const abcd = ['a','b','c','d','e','f','g','h'];
 
@@ -37,7 +37,7 @@ function dosquarerow(rowid){
 }
 
 function initgame(){
-    return [dosquarerow(8),dosquarerow(7),dosquarerow(6),dosquarerow(5),dosquarerow(4),dosquarerow(3),dosquarerow(2),dosquarerow(1)];
+    return [squarerow(8),squarerow(7),squarerow(6),squarerow(5),squarerow(4),squarerow(3),squarerow(2),squarerow(1)];
 }
 
 export {initgame};

@@ -25,3 +25,8 @@
     width: 75px;
     height: 75px;
 }
+
+.piece{
+    width: 100%;
+    background-color: transparent;
+}
