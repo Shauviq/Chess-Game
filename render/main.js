@@ -120,5 +120,17 @@ function clearhighlight(){
     });
 }
 
+//to highlight yellow
+function selfhighlight(piece){
+    document.getElementById(piece.current_position).classList.add("highlightyellow");
+}
 
-export {initgamerender,renderhighlight,clearhighlight};
+//to remove highlight yellow
+function clearpreviousselfhighlight(piece){
+    if(piece){
+        document.getElementById(piece.current_position).classList.remove("highlightyellow");
+    }
+}
+
+
+export {initgamerender,renderhighlight,clearhighlight,selfhighlight,clearpreviousselfhighlight};

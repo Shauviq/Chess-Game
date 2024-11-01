@@ -2,12 +2,22 @@ import { root_div } from "../Helper/constants.js";
 import { globalstate } from "../index.js";
 import { renderhighlight } from "../render/main.js";
 import { clearhighlight } from "../render/main.js";
+import { selfhighlight } from "../render/main.js";
+import { clearpreviousselfhighlight } from "../render/main.js";
 
 //highlighted or not 
 let highlight_state = false;
 
 
+//current yellow highlighted square 
+let selfhighlightstate = null;
+
 function whitepawnclicked({piece}){
+
+    //highlight clicked element
+    selfhighlight(piece);
+    clearpreviousselfhighlight(selfhighlightstate);
+    selfhighlightstate = piece
 
     const current_pos = piece.current_position;
     const flatarray = globalstate.flat();
