@@ -1,3 +1,5 @@
+import { renderhighlight } from "../render/main.js";
+
 function Greet() {
   alert("Hello, World");
 }
@@ -5,7 +7,12 @@ function Greet() {
   
 // for each square
 function Square(color, id, piece) {
-  return { color, id, piece };
+
+  const highlight = function(){
+    renderhighlight(this.id);
+    this.highlighted = true;
+  };
+  return { color, id, piece, highlight };
 }
 
 function squarerow(rowid){

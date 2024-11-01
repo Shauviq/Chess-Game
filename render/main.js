@@ -1,5 +1,6 @@
 import * as piece from "../Data/pieces.js";
 import { root_div } from "../Helper/constants.js";
+import { globalstate } from "../index.js";
 
 
 //use when you want to render pieces on the board
@@ -101,5 +102,23 @@ function initgamerender(data){
     piecerender(data);
 }
 
+//render highlight circle
+function renderhighlight(squareid){
+    const highlightspan = document.createElement("span");
+    highlightspan.classList.add("highlight");
+    document.getElementById(squareid).appendChild(highlightspan);
+}
 
-export {initgamerender};
+//clear all highlights
+function clearhighlight(){
+    const flatdata = globalstate.flat();
+    flatdata.forEach((el) => {
+        if(el.highlighted){
+            document.getElementById(el.id).innerHTML = "";
+            el.highlighted = false;
+        }
+    });
+}
+
+
+export {initgamerender,renderhighlight,clearhighlight};

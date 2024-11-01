@@ -7,3 +7,5 @@ const globalstate = initgame();
 
 initgamerender(globalstate);
 globalevent();
+
+export {globalstate};
