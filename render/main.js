@@ -132,5 +132,34 @@ function clearpreviousselfhighlight(piece){
     }
 }
 
+//move element to square with id
+function moveelement(piece,id){
+    const flatdata = globalstate.flat();
 
-export {initgamerender,renderhighlight,clearhighlight,selfhighlight,clearpreviousselfhighlight};
+    flatdata.forEach((el) => {
+
+        //to delete piece from previous position in database
+        if(el.id == piece.current_position){
+            delete el.piece;
+        }
+
+        if(el.id == id){
+            el.piece = piece;
+        }
+    });
+    clearhighlight();
+
+    //to actually delete the pic of the piece
+    const previouspiece = document.getElementById(piece.current_position);
+    previouspiece.classList.remove("highlightyellow");
+    const currentpiece = document.getElementById(id);
+
+    //copying html to new piece and making the previous one empty
+    currentpiece.innerHTML = previouspiece.innerHTML;
+    previouspiece.innerHTML = "";
+
+    piece.current_position = id;
+}
+
+
+export {initgamerender,renderhighlight,clearhighlight,selfhighlight,clearpreviousselfhighlight,moveelement};
