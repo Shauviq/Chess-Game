@@ -7,12 +7,7 @@ function Greet() {
   
 // for each square
 function Square(color, id, piece) {
-
-  const highlight = function(){
-    renderhighlight(this.id);
-    this.highlighted = true;
-  };
-  return { color, id, piece, highlight };
+  return { color, id, piece,};
 }
 
 function squarerow(rowid){

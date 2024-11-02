@@ -113,10 +113,16 @@ function renderhighlight(squareid){
 function clearhighlight(){
     const flatdata = globalstate.flat();
     flatdata.forEach((el) => {
-        if(el.highlighted){
-            document.getElementById(el.id).innerHTML = "";
-            el.highlighted = false;
+
+        if(el.capturehighlight){
+            document.getElementById(el.id).classList.remove("capturecolor");
         }
+
+
+        if(el.highlight){
+            el.highlight = false;
+        }
+        globalstaterenderer();
     });
 }
 
@@ -161,5 +167,33 @@ function moveelement(piece,id){
     piece.current_position = id;
 }
 
+//function global state renderer (to render pieces from gobal state data) => use when updating globalstate
+function globalstaterenderer(){
+    globalstate.forEach(row => {
+        row.forEach(element => {
 
-export {initgamerender,renderhighlight,clearhighlight,selfhighlight,clearpreviousselfhighlight,moveelement};
+            //if square highlight is true
+            if(element.highlight){
+                const highlightspan = document.createElement("span");
+                highlightspan.classList.add("highlight");
+                document.getElementById(element.id).appendChild(highlightspan);
+            }
+            else if(element.highlight === false){
+
+                const el = document.getElementById(element.id)
+                const highlights = Array.from(el.getElementsByTagName("span"));
+
+                highlights.forEach(element => {
+                    el.removeChild(element);
+                });
+                
+            }
+
+            if(element.piece != null){
+            }
+        });
+    });
+}
+
+
+export {initgamerender,renderhighlight,clearhighlight,selfhighlight,clearpreviousselfhighlight,moveelement,globalstaterenderer};
