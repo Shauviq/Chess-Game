@@ -3,13 +3,13 @@ import { globalstate } from "../index.js";
 import { renderhighlight } from "../render/main.js";
 import { clearhighlight } from "../render/main.js";
 import { selfhighlight } from "../render/main.js";
-import { clearpreviousselfhighlight } from "../render/main.js";
+// import { clearpreviousselfhighlight } from "../render/main.js";
 import { moveelement } from "../render/main.js";
 import { checkpieceofopponent } from "../Helper/commonhelper.js";
 import { globalstaterenderer } from "../render/main.js";
 
 
-//highlighted or not 
+//highlighted or not (RED)
 let highlight_state = false;
 
 
@@ -22,7 +22,9 @@ let movestate = null;
 
 //move piece from x to y
 function movepiecefromxtoy(from , to){
-
+    to.piece = from.piece;
+    from.piece = null;
+    globalstaterenderer();
 }
 
 
@@ -34,20 +36,30 @@ function clearhighlightlocal(){
 
 
 //white pawn
-function whitepawnclicked({piece}){
-    
-    clearpreviousselfhighlight(selfhighlightstate);
+function whitepawnclicked(square){
+
+    const piece = square.piece;
 
     //clicked on same element twice
     if(piece == selfhighlightstate){
-        selfhighlightstate = null;
+        clearpreviousselfhighlight(selfhighlightstate);
         clearhighlightlocal();
         return;
     }
 
+    if(square.capturehighlight){
+        moveelement(selfhighlightstate,piece.current_position);
+        clearpreviousselfhighlight(selfhighlightstate);
+        clearhighlightlocal();
+        return;
+    }
+
+    //clear all highlights
+    clearpreviousselfhighlight(selfhighlightstate);
+    clearhighlightlocal();
+    
     //highlight clicked element
     selfhighlight(piece);
-    clearpreviousselfhighlight(selfhighlightstate);
     highlight_state = true;
     selfhighlightstate = piece
 
@@ -111,20 +123,30 @@ function whitepawnclicked({piece}){
 }
 
 //black pawn
-function blackpawnclicked({piece}){
-   
-    clearpreviousselfhighlight(selfhighlightstate);
-   
+function blackpawnclicked(square){
+
+    const piece = square.piece;
+
     //clicked on same element twice
     if(piece == selfhighlightstate){
-        selfhighlightstate = null;
+        clearpreviousselfhighlight(selfhighlightstate);
         clearhighlightlocal();
         return;
     }
 
+    if(square.capturehighlight){
+        moveelement(selfhighlightstate,piece.current_position);
+        clearpreviousselfhighlight(selfhighlightstate);
+        clearhighlightlocal();
+        return;
+    }
+
+    //clear all highlights
+    clearpreviousselfhighlight(selfhighlightstate);
+    clearhighlightlocal();
+   
     //highlight clicked element
     selfhighlight(piece);
-    clearpreviousselfhighlight(selfhighlightstate);
     highlight_state = true;
     selfhighlightstate = piece
 
@@ -187,6 +209,14 @@ function blackpawnclicked({piece}){
     }
 }
 
+//to remove highlight yellow
+function clearpreviousselfhighlight(piece){
+    if(piece){
+        document.getElementById(piece.current_position).classList.remove("highlightyellow");
+        selfhighlightstate = null;
+    }
+}
+
 
 function globalevent(){
     root_div.addEventListener("click", (event) => {
@@ -202,24 +232,23 @@ function globalevent(){
             }
         }
         else{
-            selfhighlightstate = null;
             const childelementofclickedel = Array.from(event.target.childNodes);
             
             if(childelementofclickedel.length == 1 || event.target.localName == "span"){
                 //if player click on circle
                 if(event.target.localName == "span"){
+                    clearpreviousselfhighlight(selfhighlightstate);
                     const id = event.target.parentNode.id;
                     moveelement(movestate,id);
                     movestate = null;
                 }
                 //if player clickes on square
                 else{
+                    clearpreviousselfhighlight(selfhighlightstate);
                     const id = event.target.id;
                     moveelement(movestate,id);
                     movestate = null;
                 }
-
-                clearpreviousselfhighlight(selfhighlightstate);
                 selfhighlightstate = null;
             }
             else{
@@ -230,4 +259,4 @@ function globalevent(){
     });
 }
 
-export {globalevent};
+export {globalevent,movepiecefromxtoy};

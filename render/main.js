@@ -1,6 +1,7 @@
 import * as piece from "../Data/pieces.js";
 import { root_div } from "../Helper/constants.js";
 import { globalstate } from "../index.js";
+import { movepiecefromxtoy } from "../Events/global.js";
 
 
 //use when you want to render pieces on the board
@@ -116,6 +117,7 @@ function clearhighlight(){
 
         if(el.capturehighlight){
             document.getElementById(el.id).classList.remove("capturecolor");
+            el.capturehighlight = false;
         }
 
 
@@ -131,17 +133,10 @@ function selfhighlight(piece){
     document.getElementById(piece.current_position).classList.add("highlightyellow");
 }
 
-//to remove highlight yellow
-function clearpreviousselfhighlight(piece){
-    if(piece){
-        document.getElementById(piece.current_position).classList.remove("highlightyellow");
-    }
-}
-
 //move element to square with id
 function moveelement(piece,id){
+    
     const flatdata = globalstate.flat();
-
     flatdata.forEach((el) => {
 
         //to delete piece from previous position in database
@@ -153,8 +148,8 @@ function moveelement(piece,id){
             el.piece = piece;
         }
     });
-    clearhighlight();
 
+    clearhighlight();
     //to actually delete the pic of the piece
     const previouspiece = document.getElementById(piece.current_position);
     previouspiece.classList.remove("highlightyellow");
@@ -172,13 +167,14 @@ function globalstaterenderer(){
     globalstate.forEach(row => {
         row.forEach(element => {
 
-            //if square highlight is true
+            //if square highlight is true adds highlight
             if(element.highlight){
                 const highlightspan = document.createElement("span");
                 highlightspan.classList.add("highlight");
                 document.getElementById(element.id).appendChild(highlightspan);
             }
-            else if(element.highlight === false){
+            //if false remove highlight
+            else{
 
                 const el = document.getElementById(element.id)
                 const highlights = Array.from(el.getElementsByTagName("span"));
@@ -186,14 +182,10 @@ function globalstaterenderer(){
                 highlights.forEach(element => {
                     el.removeChild(element);
                 });
-                
-            }
-
-            if(element.piece != null){
             }
         });
     });
 }
 
 
-export {initgamerender,renderhighlight,clearhighlight,selfhighlight,clearpreviousselfhighlight,moveelement,globalstaterenderer};
+export {initgamerender,renderhighlight,clearhighlight,selfhighlight,moveelement,globalstaterenderer};
