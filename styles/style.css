@@ -29,7 +29,7 @@
 .piece{
     width: 100%;
     background-color: transparent;
-    cursor: grab;
+    cursor: pointer;
 }
 
 .highlight{
