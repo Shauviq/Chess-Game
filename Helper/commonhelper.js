@@ -139,4 +139,67 @@ function givebishophighlightid(id){
     };
 }
 
-export {checkpieceofopponent,checksquarecaptureid,givebishophighlightid,checkweatherpieceexistornot,checkpieceofopponentonelement};
+//function to give highlight ids for rook
+function giverookhighlightid(id){
+
+    //for top 
+    function top(id){
+        let alpha = id[0];
+        let num = Number(id[1]);
+        let resultarr = [];
+
+        while(num!=8){
+            num = num+1;
+            resultarr.push(`${alpha}${num}`);
+        }
+        return resultarr;
+    }
+
+    //for left
+    function left(id){
+        let alpha = id[0];
+        let num = Number(id[1]);
+        let resultarr = [];
+
+        while(alpha!="a"){
+            alpha = String.fromCharCode(alpha.charCodeAt(0) - 1);
+            resultarr.push(`${alpha}${num}`);
+        }
+        return resultarr;
+    }
+
+    //for right
+    function right(id){
+        let alpha = id[0];
+        let num = Number(id[1]);
+        let resultarr = [];
+
+        while(alpha!="h"){
+            alpha = String.fromCharCode(alpha.charCodeAt(0) + 1);
+            resultarr.push(`${alpha}${num}`);
+        }
+        return resultarr;
+    }
+
+    //for bottom
+    function bottom(id){
+        let alpha = id[0];
+        let num = Number(id[1]);
+        let resultarr = [];
+
+        while(num!=1){
+            num = num-1;
+            resultarr.push(`${alpha}${num}`);
+        }
+        return resultarr;
+    }
+
+    return{
+        top: top(id),
+        left: left(id),
+        right: right(id),
+        bottom: bottom(id),
+    };
+}
+
+export {checkpieceofopponent,checksquarecaptureid,givebishophighlightid,checkweatherpieceexistornot,checkpieceofopponentonelement,giverookhighlightid};
