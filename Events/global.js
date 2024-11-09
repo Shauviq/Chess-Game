@@ -1,14 +1,7 @@
 import { root_div } from "../Helper/constants.js";
-import { globalstate } from "../index.js";
-import { renderhighlight } from "../render/main.js";
-import { clearhighlight } from "../render/main.js";
-import { selfhighlight } from "../render/main.js";
-// import { clearpreviousselfhighlight } from "../render/main.js";
-import { moveelement } from "../render/main.js";
-import { checkpieceofopponent } from "../Helper/commonhelper.js";
-import { globalstaterenderer } from "../render/main.js";
-import { keysquaremapper } from "../index.js";
-import { checksquarecaptureid } from "../Helper/commonhelper.js";
+import { globalstate,keysquaremapper } from "../index.js";
+import { moveelement,globalstaterenderer,clearhighlight,selfhighlight } from "../render/main.js";
+import { checksquarecaptureid,checkpieceofopponent,givebishophighlightid,checkweatherpieceexistornot,checkpieceofopponentonelement } from "../Helper/commonhelper.js";
 
 
 //highlighted or not (RED)
@@ -104,7 +97,95 @@ function whitepawnclicked(square){
     globalstaterenderer();
 }
 
+//white bishop
+function whitebishopclicked(square){
 
+    const piece = square.piece;
+
+    //clicked on same element twice
+    if(piece == selfhighlightstate){
+        clearpreviousselfhighlight(selfhighlightstate);
+        clearhighlightlocal();
+        return;
+    }
+
+    //handel's the capturing of the piece
+    if(square.capturehighlight){
+        moveelement(selfhighlightstate,piece.current_position);
+        clearpreviousselfhighlight(selfhighlightstate);
+        clearhighlightlocal();
+        return;
+    }
+
+    //clear all highlights
+    clearpreviousselfhighlight(selfhighlightstate);
+    clearhighlightlocal();
+    
+    //highlight clicked element
+    selfhighlight(piece);
+    highlight_state = true;
+    selfhighlightstate = piece
+
+    //add piece as move state
+    movestate = piece;
+
+    const current_pos = piece.current_position;
+    const flatarray = globalstate.flat();
+
+    let highlightsquareids = givebishophighlightid(current_pos);
+
+    //temp is for capture ids
+    let temp = [];
+
+    const {bottomleft,topleft,bottomright,topright} = highlightsquareids;
+
+    //we are using checksquareid function to check if there is anything on the pass of the bishop, if there is then bishop cant move ahead of that piece
+    let result = [];
+    result.push(checksquarecaptureid(bottomleft));
+    result.push(checksquarecaptureid(topleft));
+    result.push(checksquarecaptureid(bottomright));
+    result.push(checksquarecaptureid(topright));
+
+    // insert into temp
+    temp.push(bottomleft);
+    temp.push(topleft);
+    temp.push(bottomright);
+    temp.push(topright);
+
+    highlightsquareids = result.flat();
+    console.log(highlightsquareids);
+
+    highlightsquareids.forEach((hightlight) => {
+        const element = keysquaremapper[hightlight];
+        element.highlight = true;
+    });
+
+    // code for capturing
+    let captureids = []
+
+    for(let index=0;index<temp.length;index++){
+        const arr = temp[index];
+
+        for(let j=0;j<arr.length;j++){
+            const element = arr[j];
+            let checkpieceresult = checkweatherpieceexistornot(element);
+
+            //to break if our own color piece is there no need to check ahead of it
+            if(checkpieceresult && checkpieceresult.piece && checkpieceresult.piece.piece_name.toLowerCase().includes("white")){
+                break;
+            }
+
+            //if there is an opponent piece this function will highlight it and break since we cannot go ahead of the opponent piece
+            if(checkpieceofopponentonelement(element,"white")){
+                break;
+            }
+        }
+    }
+
+    globalstaterenderer();
+}
+
+//black pawn
 function blackpawnclicked(square){
 
     const piece = square.piece;
@@ -171,6 +252,94 @@ function blackpawnclicked(square){
     globalstaterenderer();
 }
 
+//black bishop
+function blackbishopclicked(square){
+
+    const piece = square.piece;
+
+    //clicked on same element twice
+    if(piece == selfhighlightstate){
+        clearpreviousselfhighlight(selfhighlightstate);
+        clearhighlightlocal();
+        return;
+    }
+
+    //handel's the capturing of the piece
+    if(square.capturehighlight){
+        moveelement(selfhighlightstate,piece.current_position);
+        clearpreviousselfhighlight(selfhighlightstate);
+        clearhighlightlocal();
+        return;
+    }
+
+    //clear all highlights
+    clearpreviousselfhighlight(selfhighlightstate);
+    clearhighlightlocal();
+    
+    //highlight clicked element
+    selfhighlight(piece);
+    highlight_state = true;
+    selfhighlightstate = piece
+
+    //add piece as move state
+    movestate = piece;
+
+    const current_pos = piece.current_position;
+    const flatarray = globalstate.flat();
+
+    let highlightsquareids = givebishophighlightid(current_pos);
+
+    //temp is for capture ids
+    let temp = [];
+
+    const {bottomleft,topleft,bottomright,topright} = highlightsquareids;
+
+    //we are using checksquareid function to check if there is anything on the pass of the bishop, if there is then bishop cant move ahead of that piece
+    let result = [];
+    result.push(checksquarecaptureid(bottomleft));
+    result.push(checksquarecaptureid(topleft));
+    result.push(checksquarecaptureid(bottomright));
+    result.push(checksquarecaptureid(topright));
+
+    // insert into temp
+    temp.push(bottomleft);
+    temp.push(topleft);
+    temp.push(bottomright);
+    temp.push(topright);
+
+    highlightsquareids = result.flat();
+    console.log(highlightsquareids);
+
+    highlightsquareids.forEach((hightlight) => {
+        const element = keysquaremapper[hightlight];
+        element.highlight = true;
+    });
+
+    // code for capturing
+    let captureids = []
+
+    for(let index=0;index<temp.length;index++){
+        const arr = temp[index];
+
+        for(let j=0;j<arr.length;j++){
+            const element = arr[j];
+            let checkpieceresult = checkweatherpieceexistornot(element);
+
+            //to break if our own color piece is there no need to check ahead of it
+            if(checkpieceresult && checkpieceresult.piece && checkpieceresult.piece.piece_name.toLowerCase().includes("black")){
+                break;
+            }
+
+            //if there is an opponent piece this function will highlight it and break since we cannot go ahead of the opponent piece
+            if(checkpieceofopponentonelement(element,"black")){
+                break;
+            }
+        }
+    }
+
+    globalstaterenderer();
+}
+
 //to remove highlight yellow
 function clearpreviousselfhighlight(piece){
     if(piece){
@@ -192,6 +361,12 @@ function globalevent(){
             }
             else if(square.piece.piece_name == "BLACK_PAWN"){
                 blackpawnclicked(square);
+            }
+            else if(square.piece.piece_name == "WHITE_BISHOP"){
+                whitebishopclicked(square);
+            }
+            else if(square.piece.piece_name == "BLACK_BISHOP"){
+                blackbishopclicked(square);
             }
         }
         else{
