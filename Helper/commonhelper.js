@@ -202,6 +202,25 @@ function giverookhighlightid(id){
     };
 }
 
+//function to give highlight ids for queen
+function givequeenhighlightid(id){
+    const rookmoves = giverookhighlightid(id);
+    const bishopmoves = givebishophighlightid(id);
+
+    const returnresult = {
+        "left": rookmoves.left,
+        "right" :rookmoves.right,
+        "top" : rookmoves.top,
+        "bottom" : rookmoves.bottom,
+        "topleft": bishopmoves.topleft,
+        "topright": bishopmoves.topright,
+        "bottomleft" : bishopmoves.bottomleft,
+        "bottomright" : bishopmoves.bottomright
+    }
+
+    return returnresult;
+}
+
 
 //function to give highlight ids for knight
 function giveknighthighlightid(id){
@@ -386,4 +405,4 @@ function giveknighthighlightid(id){
     return [...top(),...bottom(),...left(),...right()];
 }
 
-export {checkpieceofopponent,checksquarecaptureid,givebishophighlightid,checkweatherpieceexistornot,checkpieceofopponentonelement,giverookhighlightid,giveknighthighlightid};
+export {checkpieceofopponent,checksquarecaptureid,givebishophighlightid,checkweatherpieceexistornot,checkpieceofopponentonelement,giverookhighlightid,giveknighthighlightid,givequeenhighlightid};

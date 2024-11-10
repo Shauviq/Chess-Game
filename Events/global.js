@@ -1,7 +1,7 @@
 import { root_div } from "../Helper/constants.js";
 import { globalstate,keysquaremapper } from "../index.js";
 import { moveelement,globalstaterenderer,clearhighlight,selfhighlight } from "../render/main.js";
-import { checksquarecaptureid,checkpieceofopponent,givebishophighlightid,checkweatherpieceexistornot,checkpieceofopponentonelement,giverookhighlightid,giveknighthighlightid } from "../Helper/commonhelper.js";
+import { checksquarecaptureid,checkpieceofopponent,givebishophighlightid,checkweatherpieceexistornot,checkpieceofopponentonelement,giverookhighlightid,giveknighthighlightid,givequeenhighlightid } from "../Helper/commonhelper.js";
 
 
 //highlighted or not (RED)
@@ -322,6 +322,113 @@ function whiteknightclicked(square){
     globalstaterenderer();
 }
 
+//white queen
+function whitequeenclicked(square){
+
+    const piece = square.piece;
+
+    //clicked on same element twice
+    if(piece == selfhighlightstate){
+        clearpreviousselfhighlight(selfhighlightstate);
+        clearhighlightlocal();
+        return;
+    }
+
+    //handel's the capturing of the piece
+    if(square.capturehighlight){
+        moveelement(selfhighlightstate,piece.current_position);
+        clearpreviousselfhighlight(selfhighlightstate);
+        clearhighlightlocal();
+        return;
+    }
+
+    //clear all highlights
+    clearpreviousselfhighlight(selfhighlightstate);
+    clearhighlightlocal();
+    
+    //highlight clicked element
+    selfhighlight(piece);
+    highlight_state = true;
+    selfhighlightstate = piece
+
+    //add piece as move state
+    movestate = piece;
+
+    const current_pos = piece.current_position;
+    const flatarray = globalstate.flat();
+
+    let highlightsquareids = givequeenhighlightid(current_pos);
+    let temp = [];
+
+    const {
+        left,
+        right,
+        top,
+        bottom,
+        topleft,
+        topright,
+        bottomleft,
+        bottomright,
+    } = highlightsquareids;
+
+
+    //we are using checksquareid function to check if there is anything on the pass of the bishop, if there is then bishop cant move ahead of that piece
+    let result = [];
+    result.push(checksquarecaptureid(bottomleft));
+    result.push(checksquarecaptureid(topleft));
+    result.push(checksquarecaptureid(bottomright));
+    result.push(checksquarecaptureid(topright));
+    result.push(checksquarecaptureid(bottom));
+    result.push(checksquarecaptureid(left));
+    result.push(checksquarecaptureid(right));
+    result.push(checksquarecaptureid(top));
+
+
+    // insert into temp
+    temp.push(bottomleft);
+    temp.push(topleft);
+    temp.push(bottomright);
+    temp.push(topright);
+    temp.push(top);
+    temp.push(right);
+    temp.push(bottom);
+    temp.push(left);
+
+    highlightsquareids = result.flat();
+
+    highlightsquareids.forEach((hightlight) => {
+        const element = keysquaremapper[hightlight];
+        element.highlight = true;
+    });
+
+
+    // code for capturing
+    let captureIds = [];
+
+    for (let index = 0; index < temp.length; index++) {
+      const arr = temp[index];
+  
+      for (let j = 0; j < arr.length; j++) {
+        const element = arr[j];
+  
+        let checkPieceResult = checkweatherpieceexistornot(element);
+        if (
+          checkPieceResult &&
+          checkPieceResult.piece &&
+          checkPieceResult.piece.piece_name.toLowerCase().includes("white")
+        ) {
+          break;
+        }
+  
+        if (checkpieceofopponentonelement(element, "white")) {
+          break;
+        }
+      }
+    }
+
+    globalstaterenderer();
+}
+
 //black pawn
 function blackpawnclicked(square){
 
@@ -563,6 +670,113 @@ function blackrookclicked(square){
     globalstaterenderer();
 }
 
+//black queen
+function blackqueenclicked(square){
+
+    const piece = square.piece;
+
+    //clicked on same element twice
+    if(piece == selfhighlightstate){
+        clearpreviousselfhighlight(selfhighlightstate);
+        clearhighlightlocal();
+        return;
+    }
+
+    //handel's the capturing of the piece
+    if(square.capturehighlight){
+        moveelement(selfhighlightstate,piece.current_position);
+        clearpreviousselfhighlight(selfhighlightstate);
+        clearhighlightlocal();
+        return;
+    }
+
+    //clear all highlights
+    clearpreviousselfhighlight(selfhighlightstate);
+    clearhighlightlocal();
+    
+    //highlight clicked element
+    selfhighlight(piece);
+    highlight_state = true;
+    selfhighlightstate = piece
+
+    //add piece as move state
+    movestate = piece;
+
+    const current_pos = piece.current_position;
+    const flatarray = globalstate.flat();
+
+    let highlightsquareids = givequeenhighlightid(current_pos);
+    let temp = [];
+
+    const {
+        left,
+        right,
+        top,
+        bottom,
+        topleft,
+        topright,
+        bottomleft,
+        bottomright,
+    } = highlightsquareids;
+
+
+    //we are using checksquareid function to check if there is anything on the pass of the bishop, if there is then bishop cant move ahead of that piece
+    let result = [];
+    result.push(checksquarecaptureid(bottomleft));
+    result.push(checksquarecaptureid(topleft));
+    result.push(checksquarecaptureid(bottomright));
+    result.push(checksquarecaptureid(topright));
+    result.push(checksquarecaptureid(bottom));
+    result.push(checksquarecaptureid(left));
+    result.push(checksquarecaptureid(right));
+    result.push(checksquarecaptureid(top));
+
+
+    // insert into temp
+    temp.push(bottomleft);
+    temp.push(topleft);
+    temp.push(bottomright);
+    temp.push(topright);
+    temp.push(top);
+    temp.push(right);
+    temp.push(bottom);
+    temp.push(left);
+
+    highlightsquareids = result.flat();
+
+    highlightsquareids.forEach((hightlight) => {
+        const element = keysquaremapper[hightlight];
+        element.highlight = true;
+    });
+
+
+    // code for capturing
+    let captureIds = [];
+
+    for (let index = 0; index < temp.length; index++) {
+      const arr = temp[index];
+  
+      for (let j = 0; j < arr.length; j++) {
+        const element = arr[j];
+  
+        let checkPieceResult = checkweatherpieceexistornot(element);
+        if (
+          checkPieceResult &&
+          checkPieceResult.piece &&
+          checkPieceResult.piece.piece_name.toLowerCase().includes("black")
+        ) {
+          break;
+        }
+  
+        if (checkpieceofopponentonelement(element, "black")) {
+          break;
+        }
+      }
+    }
+
+    globalstaterenderer();
+}
+
 //black knight
 function blackknightclicked(square){
 
@@ -655,6 +869,12 @@ function globalevent(){
             }
             else if(square.piece.piece_name == "BLACK_KNIGHT"){
                 blackknightclicked(square);
+            }
+            else if(square.piece.piece_name == "BLACK_QUEEN"){
+                blackqueenclicked(square);
+            }
+            else if(square.piece.piece_name == "WHITE_QUEEN"){
+                whitequeenclicked(square);
             }
         }
         else{
