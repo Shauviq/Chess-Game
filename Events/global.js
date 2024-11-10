@@ -1,7 +1,7 @@
 import { root_div } from "../Helper/constants.js";
 import { globalstate,keysquaremapper } from "../index.js";
 import { moveelement,globalstaterenderer,clearhighlight,selfhighlight } from "../render/main.js";
-import { checksquarecaptureid,checkpieceofopponent,givebishophighlightid,checkweatherpieceexistornot,checkpieceofopponentonelement,giverookhighlightid } from "../Helper/commonhelper.js";
+import { checksquarecaptureid,checkpieceofopponent,givebishophighlightid,checkweatherpieceexistornot,checkpieceofopponentonelement,giverookhighlightid,giveknighthighlightid } from "../Helper/commonhelper.js";
 
 
 //highlighted or not (RED)
@@ -271,6 +271,57 @@ function whiterookclicked(square){
     globalstaterenderer();
 }
 
+//white knight
+function whiteknightclicked(square){
+
+    const piece = square.piece;
+
+    //clicked on same element twice
+    if(piece == selfhighlightstate){
+        clearpreviousselfhighlight(selfhighlightstate);
+        clearhighlightlocal();
+        return;
+    }
+
+    //handel's the capturing of the piece
+    if(square.capturehighlight){
+        moveelement(selfhighlightstate,piece.current_position);
+        clearpreviousselfhighlight(selfhighlightstate);
+        clearhighlightlocal();
+        return;
+    }
+
+    //clear all highlights
+    clearpreviousselfhighlight(selfhighlightstate);
+    clearhighlightlocal();
+    
+    //highlight clicked element
+    selfhighlight(piece);
+    highlight_state = true;
+    selfhighlightstate = piece
+
+    //add piece as move state
+    movestate = piece;
+
+    const current_pos = piece.current_position;
+    const flatarray = globalstate.flat();
+
+    let highlightsquareids = giveknighthighlightid(current_pos);
+
+
+    highlightsquareids.forEach((hightlight) => {
+        const element = keysquaremapper[hightlight];
+        element.highlight = true;
+    });
+
+    // code for capturing
+    highlightsquareids.forEach((element) => {
+        checkpieceofopponentonelement(element,"white");
+    });
+
+    globalstaterenderer();
+}
+
 //black pawn
 function blackpawnclicked(square){
 
@@ -512,6 +563,59 @@ function blackrookclicked(square){
     globalstaterenderer();
 }
 
+//black knight
+function blackknightclicked(square){
+
+    const piece = square.piece;
+
+    //clicked on same element twice
+    if(piece == selfhighlightstate){
+        clearpreviousselfhighlight(selfhighlightstate);
+        clearhighlightlocal();
+        return;
+    }
+
+    //handel's the capturing of the piece
+    if(square.capturehighlight){
+        moveelement(selfhighlightstate,piece.current_position);
+        clearpreviousselfhighlight(selfhighlightstate);
+        clearhighlightlocal();
+        return;
+    }
+
+    //clear all highlights
+    clearpreviousselfhighlight(selfhighlightstate);
+    clearhighlightlocal();
+    
+    //highlight clicked element
+    selfhighlight(piece);
+    highlight_state = true;
+    selfhighlightstate = piece
+
+    //add piece as move state
+    movestate = piece;
+
+    const current_pos = piece.current_position;
+    const flatarray = globalstate.flat();
+
+    let highlightsquareids = giveknighthighlightid(current_pos);
+
+    console.log(highlightsquareids);
+
+
+    highlightsquareids.forEach((hightlight) => {
+        const element = keysquaremapper[hightlight];
+        element.highlight = true;
+    });
+
+    // code for capturing
+    highlightsquareids.forEach((element) => {
+        checkpieceofopponentonelement(element,"black");
+    });
+
+    globalstaterenderer();
+}
+
 //to remove highlight yellow
 function clearpreviousselfhighlight(piece){
     if(piece){
@@ -545,6 +649,12 @@ function globalevent(){
             }
             else if(square.piece.piece_name == "WHITE_ROOK"){
                 whiterookclicked(square);
+            }
+            else if(square.piece.piece_name == "WHITE_KNIGHT"){
+                whiteknightclicked(square);
+            }
+            else if(square.piece.piece_name == "BLACK_KNIGHT"){
+                blackknightclicked(square);
             }
         }
         else{

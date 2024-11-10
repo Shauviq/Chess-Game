@@ -202,4 +202,188 @@ function giverookhighlightid(id){
     };
 }
 
-export {checkpieceofopponent,checksquarecaptureid,givebishophighlightid,checkweatherpieceexistornot,checkpieceofopponentonelement,giverookhighlightid};
+
+//function to give highlight ids for knight
+function giveknighthighlightid(id){
+
+    if(!id){
+        return;
+    }
+
+    //for left
+    function left(){
+        let alpha = id[0];
+        let num = Number(id[1]);
+        let resultarr = [];
+
+        let temp =0;
+
+        //this loop is to find square two square away
+        while(alpha!="a"){
+
+            if(temp==2){
+                break;
+            }
+
+            alpha = String.fromCharCode(alpha.charCodeAt(0) - 1);
+            resultarr.push(`${alpha}${num}`);
+            temp++;
+        }
+
+        //now that we have that we will do this to find an upper element and a lower element
+        if(resultarr.length==2){
+            let finalreturnarr = []
+
+            const lastelement = resultarr[resultarr.length - 1];
+            let alpha = lastelement[0];
+            let number = Number(lastelement[1]);
+
+            if(number<8){
+                finalreturnarr.push(`${alpha}${number+1}`);
+            }
+            if(number>1){
+                finalreturnarr.push(`${alpha}${number-1}`);
+            }
+            return finalreturnarr
+        }
+        //if the size of array is not two then that means knight cant move this side
+        else{
+            return [];
+        }
+    }
+
+    //for top
+    function top(){
+        let alpha = id[0];
+        let num = Number(id[1]);
+        let resultarr = [];
+
+        let temp =0;
+
+        //this loop is to find square two square away
+        while(num!="8"){
+
+            if(temp==2){
+                break;
+            }
+
+            num = num+1;
+            resultarr.push(`${alpha}${num}`);
+            temp++;
+        }
+
+        //now that we have that we will do this to find an upper element and a lower element
+        if(resultarr.length==2){
+            let finalreturnarr = []
+
+            const lastelement = resultarr[resultarr.length-1]
+            let alpha = lastelement[0];
+            let number = Number(lastelement[1]);
+
+            if(alpha!="a"){
+                let alpha2 = String.fromCharCode(alpha.charCodeAt(0) - 1);
+                finalreturnarr.push(`${alpha2}${number}`);
+            }
+            if(alpha!="h"){
+                let alpha2 = String.fromCharCode(alpha.charCodeAt(0) + 1);
+                finalreturnarr.push(`${alpha2}${number}`);
+            }
+            return finalreturnarr
+        }
+        //if the size of array is not two then that means knight cant move this side
+        else{
+            return [];
+        }
+    }
+
+    //for right
+    function right(){
+        let alpha = id[0];
+        let num = Number(id[1]);
+        let resultarr = [];
+
+        let temp =0;
+
+        //this loop is to find square two square away
+        while(alpha!="h"){
+
+            if(temp==2){
+                break;
+            }
+
+            alpha = String.fromCharCode(alpha.charCodeAt(0) + 1);
+            resultarr.push(`${alpha}${num}`);
+            temp++;
+        }
+
+        //now that we have that we will do this to find an upper element and a lower element
+        if(resultarr.length==2){
+            let finalreturnarr = []
+
+            const lastelement = resultarr[resultarr.length-1]
+            let alpha = lastelement[0];
+            let number = Number(lastelement[1]);
+
+            if(number<8){
+                finalreturnarr.push(`${alpha}${number+1}`);
+            }
+            if(number>1){
+                finalreturnarr.push(`${alpha}${number-1}`);
+            }
+            return finalreturnarr
+        }
+        //if the size of array is not two then that means knight cant move this side
+        else{
+            return [];
+        }
+    }
+
+    //for bottom
+    function bottom(){
+        let alpha = id[0];
+        let num = Number(id[1]);
+        let resultarr = [];
+
+        let temp =0;
+
+        //this loop is to find square two square away
+        while(num!="1"){
+
+            if(temp==2){
+                break;
+            }
+
+            num = num-1;
+            resultarr.push(`${alpha}${num}`);
+            temp++;
+        }
+
+        //now that we have that we will do this to find an upper element and a lower element
+        if(resultarr.length==2){
+            let finalreturnarr = []
+
+            const lastelement = resultarr[resultarr.length - 1];
+            let alpha = lastelement[0];
+            let number = Number(lastelement[1]);
+
+            if(alpha!="a"){
+                let alpha2 = String.fromCharCode(alpha.charCodeAt(0) - 1);
+                finalreturnarr.push(`${alpha2}${number}`);
+            }
+            if(alpha!="h"){
+                let alpha2 = String.fromCharCode(alpha.charCodeAt(0) + 1);
+                finalreturnarr.push(`${alpha2}${number}`);
+            }
+            return finalreturnarr
+        }
+        //if the size of array is not two then that means knight cant move this side
+        else{
+            return [];
+        }
+    }
+
+    //the ... is known as spread operator it will convert all arrays from different functions into a single array
+    return [...top(),...bottom(),...left(),...right()];
+}
+
+export {checkpieceofopponent,checksquarecaptureid,givebishophighlightid,checkweatherpieceexistornot,checkpieceofopponentonelement,giverookhighlightid,giveknighthighlightid};
