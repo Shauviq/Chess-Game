@@ -221,6 +221,36 @@ function givequeenhighlightid(id){
     return returnresult;
 }
 
+//function to give highlight ids for king
+function givekinghighlightid(id){
+    const rookmoves = giverookhighlightid(id);
+    const bishopmoves = givebishophighlightid(id);
+
+    const returnresult = {
+        "left": rookmoves.left,
+        "right" :rookmoves.right,
+        "top" : rookmoves.top,
+        "bottom" : rookmoves.bottom,
+        "topleft": bishopmoves.topleft,
+        "topright": bishopmoves.topright,
+        "bottomleft" : bishopmoves.bottomleft,
+        "bottomright" : bishopmoves.bottomright
+    }
+
+
+    //this loop will give one move in each direction -> will be filtered from each array of returnresult 
+    for (const key in returnresult) {
+        if (Object.prototype.hasOwnProperty.call(returnresult, key)) {
+            const element = returnresult[key];
+
+            if(element.length!=0){
+                returnresult[key] = new Array(element[0]);
+            }
+        }
+    }
+    return returnresult;
+}
+
 
 //function to give highlight ids for knight
 function giveknighthighlightid(id){
@@ -405,4 +435,4 @@ function giveknighthighlightid(id){
     return [...top(),...bottom(),...left(),...right()];
 }
 
-export {checkpieceofopponent,checksquarecaptureid,givebishophighlightid,checkweatherpieceexistornot,checkpieceofopponentonelement,giverookhighlightid,giveknighthighlightid,givequeenhighlightid};
+export {checkpieceofopponent,checksquarecaptureid,givebishophighlightid,checkweatherpieceexistornot,checkpieceofopponentonelement,giverookhighlightid,giveknighthighlightid,givequeenhighlightid,givekinghighlightid};
