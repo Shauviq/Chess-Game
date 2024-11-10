@@ -133,34 +133,6 @@ function selfhighlight(piece){
     document.getElementById(piece.current_position).classList.add("highlightyellow");
 }
 
-//move element to square with id
-function moveelement(piece,id){
-    
-    const flatdata = globalstate.flat();
-    flatdata.forEach((el) => {
-
-        //to delete piece from previous position in database
-        if(el.id == piece.current_position){
-            delete el.piece;
-        }
-
-        if(el.id == id){
-            el.piece = piece;
-        }
-    });
-
-    clearhighlight();
-    //to actually delete the pic of the piece
-    const previouspiece = document.getElementById(piece.current_position);
-    previouspiece.classList.remove("highlightyellow");
-    const currentpiece = document.getElementById(id);
-
-    //copying html to new piece and making the previous one empty
-    currentpiece.innerHTML = previouspiece.innerHTML;
-    previouspiece.innerHTML = "";
-
-    piece.current_position = id;
-}
 
 //function global state renderer (to render pieces from gobal state data) => use when updating globalstate
 function globalstaterenderer(){
@@ -188,4 +160,4 @@ function globalstaterenderer(){
 }
 
 
-export {initgamerender,renderhighlight,clearhighlight,selfhighlight,moveelement,globalstaterenderer};
+export {initgamerender,renderhighlight,clearhighlight,selfhighlight,globalstaterenderer};

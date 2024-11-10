@@ -1,11 +1,69 @@
 import { root_div } from "../Helper/constants.js";
 import { globalstate,keysquaremapper } from "../index.js";
-import { moveelement,globalstaterenderer,clearhighlight,selfhighlight } from "../render/main.js";
+import { globalstaterenderer,clearhighlight,selfhighlight } from "../render/main.js";
 import { checksquarecaptureid,checkpieceofopponent,givebishophighlightid,checkweatherpieceexistornot,checkpieceofopponentonelement,giverookhighlightid,giveknighthighlightid,givequeenhighlightid,givekinghighlightid } from "../Helper/commonhelper.js";
 
 
 //highlighted or not (RED)
 let highlight_state = false;
+
+//to track turn
+let inturn = "white";
+
+function changeturn(){
+    inturn = inturn === "white" ? "black" : "white";
+}
+
+//to capture when its turn to capture
+function captureinturn(square){
+    const piece = square.piece;
+
+    //clicked on same element twice
+    if(piece == selfhighlightstate){
+        clearpreviousselfhighlight(selfhighlightstate);
+        clearhighlightlocal();
+        return;
+    }
+
+    if(square.capturehighlight){
+        moveelement(selfhighlightstate,piece.current_position);
+        clearpreviousselfhighlight(selfhighlightstate);
+        clearhighlightlocal();
+        return;
+    }
+
+    return;
+}
+
+//move element to square with id
+function moveelement(piece,id){
+    
+    changeturn();
+    const flatdata = globalstate.flat();
+    flatdata.forEach((el) => {
+
+        //to delete piece from previous position in database
+        if(el.id == piece.current_position){
+            delete el.piece;
+        }
+
+        if(el.id == id){
+            el.piece = piece;
+        }
+    });
+
+    clearhighlight();
+    //to actually delete the pic of the piece
+    const previouspiece = document.getElementById(piece.current_position);
+    previouspiece.classList.remove("highlightyellow");
+    const currentpiece = document.getElementById(id);
+
+    //copying html to new piece and making the previous one empty
+    currentpiece.innerHTML = previouspiece.innerHTML;
+    previouspiece.innerHTML = "";
+
+    piece.current_position = id;
+}
 
 
 //current yellow highlighted square 
@@ -1057,44 +1115,49 @@ function globalevent(){
     root_div.addEventListener("click", (event) => {
         if(event.target.localName === "img"){
             const clickid = event.target.parentNode.id;
-            // const flatarray = globalstate.flat();
-            // const square = flatarray.find((el) => el.id == clickid);
             const square = keysquaremapper[clickid];
+
+            // to enable capture with inturn
+            if(square.piece.piece_name.includes("WHITE") && inturn === "black" || square.piece.piece_name.includes("BLACK") && inturn === "white"){
+                captureinturn(square);
+                return;
+            }
+
             if(square.piece.piece_name == "WHITE_PAWN"){
-                whitepawnclicked(square);
+                if(inturn == "white") whitepawnclicked(square);
             }
             else if(square.piece.piece_name == "BLACK_PAWN"){
-                blackpawnclicked(square);
+                if(inturn == "black") blackpawnclicked(square);
             }
             else if(square.piece.piece_name == "WHITE_BISHOP"){
-                whitebishopclicked(square);
+                if(inturn == "white") whitebishopclicked(square);
             }
             else if(square.piece.piece_name == "BLACK_BISHOP"){
-                blackbishopclicked(square);
+                if(inturn == "black") blackbishopclicked(square);
             }
             else if(square.piece.piece_name == "BLACK_ROOK"){
-                blackrookclicked(square);
+                if(inturn == "black") blackrookclicked(square);
             }
             else if(square.piece.piece_name == "WHITE_ROOK"){
-                whiterookclicked(square);
+                if(inturn == "white") whiterookclicked(square);
             }
             else if(square.piece.piece_name == "WHITE_KNIGHT"){
-                whiteknightclicked(square);
+                if(inturn == "white") whiteknightclicked(square);
             }
             else if(square.piece.piece_name == "BLACK_KNIGHT"){
-                blackknightclicked(square);
+                if(inturn == "black") blackknightclicked(square);
             }
             else if(square.piece.piece_name == "BLACK_QUEEN"){
-                blackqueenclicked(square);
+                if(inturn == "black") blackqueenclicked(square);
             }
             else if(square.piece.piece_name == "WHITE_QUEEN"){
-                whitequeenclicked(square);
+                if(inturn == "white") whitequeenclicked(square);
             }
             else if(square.piece.piece_name == "WHITE_KING"){
-                whitekingclicked(square);
+                if(inturn == "white") whitekingclicked(square);
             }
             else if(square.piece.piece_name == "BLACK_KING"){
-                blackkingclicked(square);
+                if(inturn == "black") blackkingclicked(square);
             }
         }
         else{
